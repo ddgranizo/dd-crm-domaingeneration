@@ -1,0 +1,550 @@
+﻿<Window x:Class="ModelUI.Views.Main"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ModelUI.Views"
+        
+        xmlns:vm="clr-namespace:ModelUI.Viewmodels" 
+        xmlns:conv="clr-namespace:ModelUI.Converters"
+        
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"        
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        
+        
+        mc:Ignorable="d"
+        Title="Main" Height="450" Width="800">
+    <Grid x:Name="LayoutRoot"  Background="White" >
+        <Grid.Resources>
+            <vm:MainViewmodel x:Key="viewModel" d:IsDataSource="True"></vm:MainViewmodel>
+            <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        </Grid.Resources>
+        <Grid DataContext="{Binding Source={StaticResource viewModel}}">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <materialDesign:DialogHost IsOpen="{Binding IsDialogOpen}" Grid.RowSpan="2" Panel.ZIndex="200">
+                    <materialDesign:DialogHost.DialogContent>
+                        <Grid Margin="20">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="1" Text="{Binding MessageDialog}" />
+                        </Grid>
+                    </materialDesign:DialogHost.DialogContent>
+                </materialDesign:DialogHost>
+                
+                <DockPanel Grid.Row="0">
+                    <Menu DockPanel.Dock="Top" Background="White">
+                        <MenuItem Header="Archivo">
+                            <MenuItem Header="Dominios"  Command="{Binding Source={StaticResource viewModel}, Path=ShowDomainManagerCommand, Mode=OneWay}" />
+                            <!--<MenuItem Header="Show errors"  Command="{Binding Source={StaticResource viewModel}, Path=ShowErrorsCommand, Mode=OneWay}" />-->
+
+                        </MenuItem>
+                        <!--<MenuItem Header="Settings">
+                            <MenuItem Header="Settings"  Command="{Binding Source={StaticResource viewModel}, Path=OpenSettingsCommand, Mode=OneWay}" />
+                            <Separator />
+                            <MenuItem Header="Manage connections"  Command="{Binding Source={StaticResource viewModel}, Path=OpenConnectionsCommand, Mode=OneWay}" />
+                            <Separator/>
+                            <MenuItem Header="USD Configuration Comparer Criteria"  Command="{Binding Source={StaticResource viewModel}, Path=OpenUsdComparerConfigurationManagerCommand, Mode=OneWay}" />
+                        </MenuItem>-->
+
+                    </Menu>
+                </DockPanel>
+
+                <Grid Grid.Row="1" >
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <GroupBox Grid.Row="1" Header="Entidades">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Button Grid.Column="0" Margin="5" Width="30" Height="30" Style="{DynamicResource MaterialDesignFloatingActionLightButton}"  Command="{Binding Source={StaticResource viewModel}, Path=AddEntityRequestCommand, Mode=OneWay}" ToolTip="Añadir nueva entidad">
+                                        <materialDesign:PackIcon Kind="Add" Width="20" Height="20"/>
+                                    </Button>
+                                    <Button Grid.Column="1"  Margin="5"  Width="30" Height="30" Style="{DynamicResource MaterialDesignFloatingActionLightButton}"  Command="{Binding Source={StaticResource viewModel}, Path=DeleteEntityCommand, Mode=OneWay}"  ToolTip="Eliminar entidad seleccionada">
+                                        <materialDesign:PackIcon Kind="Delete" Width="20" Height="20"/>
+                                    </Button>
+                                    <Button Grid.Column="2"  Margin="5"  Width="30" Height="30" Style="{DynamicResource MaterialDesignFloatingActionLightButton}"  Command="{Binding Source={StaticResource viewModel}, Path=SelectUnselectAllCommand, Mode=OneWay}"   ToolTip="Seleccionar/Deseleccionar todas las entidades">
+                                        <materialDesign:PackIcon Kind="SelectAll" Width="20" Height="20"/>
+                                    </Button>
+
+                                    <StackPanel Orientation="Vertical"  Grid.Column="3">
+                                        <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Horizontal" Grid.Column="4">
+                                        <Button Grid.Column="3" Style="{DynamicResource  MaterialDesignFloatingActionLightButton}" Width="30" Height="30" Command="{Binding Source={StaticResource viewModel}, Path=EditCommonDataRequestCommand, Mode=OneWay}"  ToolTip="Editar parámetros comunes">
+                                            <materialDesign:PackIcon Kind="Settings" Width="20" Height="20"/>
+                                        </Button>
+                                    </StackPanel>
+
+                                    <StackPanel  Grid.Column="6" VerticalAlignment="Center" Orientation="Horizontal">
+                                        <Label  VerticalAlignment="Center">Entity Definitions and Global enums</Label>
+                                        <ToggleButton  VerticalAlignment="Center" IsChecked="{Binding GenerateGlobalEnums}" >
+
+                                        </ToggleButton>
+                                    </StackPanel>
+                                    <Button Grid.Column="7"  Margin="5"  Width="30" Height="30" Style="{DynamicResource MaterialDesignFloatingActionLightButton}"  Command="{Binding Source={StaticResource viewModel}, Path=StartGeneratingCommand, Mode=OneWay}" ToolTip="Generar modelo">
+                                        <materialDesign:PackIcon Kind="Play" Width="20" Height="20"/>
+                                    </Button>
+
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Grid.Column="0">Filter:</Label>
+                                    <ToggleButton Grid.Column="1" IsChecked="{Binding IsFilterByEntityEnabled}"></ToggleButton>
+                                    <ComboBox ItemsSource="{Binding DomainsCollection}" SelectedItem="{Binding SelectedFilterDomain}" Grid.Column="2"></ComboBox>
+                                </Grid>
+                                <ScrollViewer x:Name="TargetEntitiesScrollViewer" Grid.Row="2" Margin="5">
+                                    <ListView x:Name="TargetEntitiesList" ItemsSource="{Binding TargetEntitiesCollection}" SelectedItem="{Binding SelectedEntity}" PreviewMouseWheel="TargetEntitiesList_PreviewMouseWheel">
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="auto"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="auto"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <ToggleButton Margin="6" Grid.Column="0" IsChecked="{Binding IsSelected}"></ToggleButton>
+                                                    <TextBlock Grid.Column="2" Text="{Binding LogicalName}" VerticalAlignment="Center"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+
+                                    </ListView>
+
+                                </ScrollViewer>
+                            </Grid>
+
+                        </GroupBox>
+                    </Grid>
+                    <GridSplitter HorizontalAlignment="Right" 
+                  VerticalAlignment="Stretch" 
+                  Grid.Column="1" ResizeBehavior="PreviousAndNext"
+                  Width="5" Background="AliceBlue"/>
+
+                    <Grid Grid.Column="2" Visibility="{Binding IsCommonDetailShowing, Converter={StaticResource BoolToVisibilityConverter}}" >
+                        <GroupBox Header="Editar entidad">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="50"/>
+                                    <RowDefinition Height="50"/>
+                                    <RowDefinition Height="50"/>
+                                    <RowDefinition Height="50"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right">Global enums output file:</TextBlock>
+                                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding CommonTargetData.GlobalEnumsOutputFile}" VerticalAlignment="Center" ></TextBox>
+                                <TextBlock Grid.Row="0" Grid.Column="2"  Margin="5" VerticalAlignment="Center" >Ruta donde se guardará el archio de global enums cuando se ejecute</TextBlock>
+
+                                <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right">Trim prexies:</TextBlock>
+                                <ToggleButton Grid.Row="1" Grid.Column="1" IsChecked="{Binding CommonTargetData.TrimPrefix}" VerticalAlignment="Center" ></ToggleButton>
+                                <TextBlock Grid.Row="1" Grid.Column="2"  Margin="5" VerticalAlignment="Center" >Eliminar prefijos de nombres de campo (scm, etc)</TextBlock>
+
+                                <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right">Prefixes:</TextBlock>
+                                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding TrimPrefixesInput}" VerticalAlignment="Center" ></TextBox>
+                                <TextBlock Grid.Row="2" Grid.Column="2"  Margin="5" VerticalAlignment="Center" >Prefijos que se eliminarán (separados por comas (,))</TextBlock>
+
+
+                                <TextBlock Grid.Row="3" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right">Capitalizar nombres:</TextBlock>
+                                <ToggleButton Grid.Row="3" Grid.Column="1" IsChecked="{Binding CommonTargetData.Capitalize}" VerticalAlignment="Center" ></ToggleButton>
+                                <TextBlock Grid.Row="3" Grid.Column="2"  Margin="5" VerticalAlignment="Center" >Intenta formar nombres en PascalCase</TextBlock>
+
+
+
+                                <Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <GroupBox Header="Mapping campos para todas las entidades" Grid.Column="0"  Margin="3" >
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" >
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="auto"/>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+
+                                                <Grid Grid.Row="0" >
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="auto"/>
+                                                        <ColumnDefinition Width="auto"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Button Margin="5" Width="30" Height="30" Grid.Column="0" Style="{DynamicResource MaterialDesignFloatingActionLightButton}"  Command="{Binding Source={StaticResource viewModel}, Path=AddCommonMappingCommand, Mode=OneWay}" VerticalAlignment="Center"  ToolTip="Añadir mapping común para Atributo">
+                                                        <materialDesign:PackIcon Kind="Add" Width="20" Height="20"/>
+                                                    </Button>
+                                                    <Label Grid.Column="1" Margin="5" VerticalAlignment="Center">Filter:</Label>
+                                                    <TextBox Grid.Column="2" Text="{Binding FilterCommonMappingInput, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+
+                                                </Grid>
+
+                                                <DataGrid x:Name="CommonMappingGrid" Grid.Row="1" ItemsSource="{Binding CommonMappingsEditablesCollection}" AutoGenerateColumns="False" CanUserAddRows="True" CanUserDeleteRows="True" >
+                                                    <DataGrid.Columns>
+                                                        <DataGridTextColumn Header="CRM Logical name" Binding="{Binding Key}" />
+                                                        <DataGridTextColumn Header="Property name for C#" Binding="{Binding Value}" />
+                                                        <DataGridTextColumn Header="Source" Binding="{Binding Source}" IsReadOnly="True"/>
+                                                    </DataGrid.Columns>
+                                                </DataGrid>
+                                            </Grid>
+
+                                        </Grid>
+                                    </GroupBox>
+
+
+
+                                    <GroupBox Header="Mapping picklist globales" Grid.Column="1" Margin="3" >
+                                        <Grid >
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" >
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="auto"/>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+
+                                                <Grid Grid.Row="0" >
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="auto"/>
+                                                        <ColumnDefinition Width="auto"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Button Margin="5" Width="30" Height="30" Grid.Column="0" Style="{DynamicResource MaterialDesignFloatingActionLightButton}"  Command="{Binding Source={StaticResource viewModel}, Path=AddCommonEnumCommand, Mode=OneWay}" VerticalAlignment="Center"  ToolTip="Añadir mapping comun para Picklist">
+                                                        <materialDesign:PackIcon Kind="Add" Width="20" Height="20"/>
+                                                    </Button>
+                                                    <Label Grid.Column="1" Margin="5" VerticalAlignment="Center">Filter:</Label>
+                                                    <TextBox Grid.Column="2" Text="{Binding FilterCommonEnumInput, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+
+                                                </Grid>
+
+                                                <ScrollViewer x:Name="CommonEnumGridScrollViewer" Grid.Row="1" >
+                                                    <DataGrid x:Name="CommonEnumGrid" ItemsSource="{Binding CommonEnumsEditablesCollection}" AutoGenerateColumns="False" CanUserAddRows="True" CanUserDeleteRows="True" PreviewMouseWheel="CommonEnumGrid_PreviewMouseWheel">
+                                                        <DataGrid.Columns>
+                                                            <DataGridTextColumn Header="CRM Picklist name" Binding="{Binding Key}" />
+                                                            <DataGridTextColumn Header="Property name for C#" Binding="{Binding Value}" />
+                                                        </DataGrid.Columns>
+                                                    </DataGrid>
+                                                </ScrollViewer>
+
+                                            </Grid>
+
+                                        </Grid>
+                                    </GroupBox>
+
+                                </Grid>
+
+
+
+                                <StackPanel Grid.Row="5"  VerticalAlignment="Bottom" Grid.Column="2" HorizontalAlignment="Right" Orientation="Horizontal">
+                                    <Button Margin="5"  Width="30" Height="30" Style="{DynamicResource MaterialDesignFloatingActionLightButton}"  Command="{Binding Source={StaticResource viewModel}, Path=CancelEditCommonTargetDataCommand, Mode=OneWay}" CommandParameter="{Binding}"  ToolTip="Cancelar cambios">
+                                        <materialDesign:PackIcon Kind="Cancel" Width="20" Height="20"/>
+                                    </Button>
+                                    <Button Margin="5"  Width="30" Height="30" Style="{DynamicResource MaterialDesignFloatingActionLightButton}"  Command="{Binding Source={StaticResource viewModel}, Path=ConfirmEditCommonDataTargetCommand, Mode=OneWay}" CommandParameter="{Binding}"  ToolTip="Guardar cambios">
+                                        <materialDesign:PackIcon Kind="ContentSave" Width="20" Height="20"/>
+                                    </Button>
+                                </StackPanel>
+
+                            </Grid>
+                        </GroupBox>
+
+                    </Grid>
+
+
+                    <Grid Grid.Column="2" Visibility="{Binding IsEntityDetailShowing, Converter={StaticResource BoolToVisibilityConverter}}" >
+                        <GroupBox Header="Editar entidad">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="50"/>
+                                    <RowDefinition Height="50"/>
+                                    <RowDefinition Height="50"/>
+                                    <RowDefinition Height="50"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right">Entity domain name:</TextBlock>
+                                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SelectedEntity.EntityDomainName, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" ></TextBox>
+                                <TextBlock Grid.Row="0" Grid.Column="2"  Margin="5" VerticalAlignment="Center" >Nombre de dominio de la entidad</TextBlock>
+
+                                <!--<TextBlock Grid.Row="1" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right">Plural namespace:</TextBlock>
+                                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SelectedEntity.PluralNamespaceName, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" ></TextBox>
+                                <TextBlock Grid.Row="1" Grid.Column="2"  Margin="5" VerticalAlignment="Center" >Nombre en plural del dominio</TextBlock>-->
+
+
+                                <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right">Domain:</TextBlock>
+                                <!--<TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SelectedEntity.PluralNamespaceName, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" ></TextBox>-->
+                                <ComboBox Grid.Row="1" Grid.Column="1"  ItemsSource="{Binding DomainsCollection}" SelectedItem="{Binding SelectedDomain}" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Row="1" Grid.Column="2"  Margin="5" VerticalAlignment="Center" >Dominio en el que se incluirá</TextBlock>
+
+
+                                <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right">Output file:</TextBlock>
+                                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding SelectedEntity.OutputFile, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="{Binding IsDefaultOutputFile}" VerticalAlignment="Center"></TextBox>
+
+
+                                <Grid Grid.Row="2" Grid.Column="2"  Margin="5" VerticalAlignment="Center"  >
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <ToggleButton Grid.Column="0" IsChecked="{Binding IsDefaultOutputFile}"></ToggleButton>
+                                    <TextBlock Grid.Column="1">Use default output path</TextBlock>
+
+                                </Grid>
+                                
+                                
+                                
+                                
+
+                                <TextBlock Grid.Row="3" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right">Mapping:</TextBlock>
+                                <TextBlock Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"  Margin="5" VerticalAlignment="Center" >Mapping que se aplicará para sustituir nombres de campos en CRM con nombres en CamelCase</TextBlock>
+
+
+                                <Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <GroupBox Header="Mapping campos de entidad" Grid.Column="0"  Margin="3" >
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" >
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="auto"/>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+
+                                                <Grid Grid.Row="0" >
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="auto"/>
+                                                        <ColumnDefinition Width="auto"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Button Margin="5" Width="30" Height="30" Grid.Column="0" Style="{DynamicResource MaterialDesignFloatingActionLightButton}"  Command="{Binding Source={StaticResource viewModel}, Path=AddMappingCommand, Mode=OneWay}" CommandParameter="{Binding}" VerticalAlignment="Center"  ToolTip="Añadir mapping para Atributo">
+                                                        <materialDesign:PackIcon Kind="Add" Width="20" Height="20"/>
+                                                    </Button>
+                                                    <Label Grid.Column="1" Margin="5" VerticalAlignment="Center">Filter:</Label>
+                                                    <TextBox Grid.Column="2" Text="{Binding FilterMappingInput, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+
+                                                </Grid>
+
+                                                <ScrollViewer x:Name="MappingGridScrollViewer" Grid.Row="1" >
+                                                    <DataGrid x:Name="MappingGrid" ItemsSource="{Binding MappingsEditablesCollection}" AutoGenerateColumns="False" CanUserAddRows="True" CanUserDeleteRows="True" PreviewMouseWheel="MappingGrid_PreviewMouseWheel" BeginningEdit="MappingGrid_BeginningEdit" >
+                                                        <DataGrid.Columns>
+                                                            <DataGridTextColumn Header="CRM Logical name" Binding="{Binding Key}" />
+                                                            <DataGridTextColumn Header="Property name for C#" Binding="{Binding Value}" />
+                                                            <DataGridTextColumn Header="Source" Binding="{Binding Source}" IsReadOnly="True"/>
+                                                        </DataGrid.Columns>
+                                                    </DataGrid>
+                                                </ScrollViewer>
+
+                                            </Grid>
+
+                                        </Grid>
+                                    </GroupBox>
+
+
+
+                                    <GroupBox Header="Mapping picklist de entidad" Grid.Column="1" Margin="3" >
+                                        <Grid >
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" >
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="auto"/>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+
+                                                <Grid Grid.Row="0" >
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="auto"/>
+                                                        <ColumnDefinition Width="auto"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Button Margin="5" Width="30" Height="30" Grid.Column="0" Style="{DynamicResource MaterialDesignFloatingActionLightButton}"  Command="{Binding Source={StaticResource viewModel}, Path=AddEnumCommand, Mode=OneWay}" VerticalAlignment="Center"  ToolTip="Añadir mapping para Picklist">
+                                                        <materialDesign:PackIcon Kind="Add" Width="20" Height="20"/>
+                                                    </Button>
+                                                    <Label Grid.Column="1" Margin="5" VerticalAlignment="Center">Filter:</Label>
+                                                    <TextBox Grid.Column="2" Text="{Binding FilterEnumInput, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+
+                                                </Grid>
+
+                                                <ScrollViewer x:Name="EnumGridScrollViewer" Grid.Row="1" >
+                                                    <DataGrid x:Name="EnumGrid" ItemsSource="{Binding EnumsEditablesCollection}" AutoGenerateColumns="False" CanUserAddRows="True" CanUserDeleteRows="True" PreviewMouseWheel="EnumGrid_PreviewMouseWheel">
+                                                        <DataGrid.Columns>
+                                                            <DataGridTextColumn Header="CRM Picklist name" Binding="{Binding Key}" />
+                                                            <DataGridTextColumn Header="Property name for C#" Binding="{Binding Value}" />
+                                                        </DataGrid.Columns>
+                                                    </DataGrid>
+                                                </ScrollViewer>
+
+                                            </Grid>
+
+                                        </Grid>
+                                    </GroupBox>
+
+                                </Grid>
+
+
+                                <StackPanel Grid.Row="5"  VerticalAlignment="Bottom" Grid.Column="2" HorizontalAlignment="Right" Orientation="Horizontal">
+
+                                    <Button Margin="5"  Width="30" Height="30" Style="{DynamicResource MaterialDesignFloatingActionLightButton}"  Command="{Binding Source={StaticResource viewModel}, Path=CancelEditTargetEntityCommand, Mode=OneWay}"  ToolTip="Cancelar cambios">
+                                        <materialDesign:PackIcon Kind="Cancel" Width="20" Height="20"/>
+                                    </Button>
+                                    <Button Margin="5"  Width="30" Height="30" Style="{DynamicResource MaterialDesignFloatingActionLightButton}"  Command="{Binding Source={StaticResource viewModel}, Path=ConfirmEditTargetEntityCommand, Mode=OneWay}" ToolTip="Guardar cambios">
+                                        <materialDesign:PackIcon Kind="ContentSave" Width="20" Height="20"/>
+                                    </Button>
+                                </StackPanel>
+
+                            </Grid>
+                        </GroupBox>
+
+                    </Grid>
+
+
+                    <Grid Grid.Column="2" Visibility="{Binding IsAddingNewEntity, Converter={StaticResource BoolToVisibilityConverter}}" >
+                        <GroupBox Header="Añadir nueva entidad">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Margin="5" VerticalAlignment="Center">Logical name en CRM:</TextBlock>
+                                <TextBox Grid.Column="1" Text="{Binding NewEntityName, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+
+                                <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right">Domain:</TextBlock>
+                                <!--<TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SelectedEntity.PluralNamespaceName, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" ></TextBox>-->
+                                <ComboBox Grid.Row="1" Grid.Column="1"  ItemsSource="{Binding DomainsCollection}" SelectedItem="{Binding SelectedDomain}" VerticalAlignment="Center"/>
+
+                                <TextBlock Grid.Column="0" Margin="5" Grid.Row="2" VerticalAlignment="Center">Nombre de entidad:</TextBlock>
+                                <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding NewEntityDisplayName, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+
+                                
+                                <StackPanel Grid.Row="3"  VerticalAlignment="Bottom" Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal">
+
+                                    <Button Margin="5"  Width="30" Height="30" Style="{DynamicResource MaterialDesignFloatingActionLightButton}"  Command="{Binding Source={StaticResource viewModel}, Path=CancelAddEntityCommand, Mode=OneWay}"  ToolTip="Cancelar cambios">
+                                        <materialDesign:PackIcon Kind="Cancel" Width="20" Height="20"/>
+                                    </Button>
+                                    <Button Margin="5"  Width="30" Height="30" Style="{DynamicResource MaterialDesignFloatingActionLightButton}"  Command="{Binding Source={StaticResource viewModel}, Path=AddEntityCommand, Mode=OneWay}"  ToolTip="Guardar cambios">
+                                        <materialDesign:PackIcon Kind="Add" Width="20" Height="20"/>
+                                    </Button>
+                                </StackPanel>
+
+                            </Grid>
+                        </GroupBox>
+
+                    </Grid>
+
+
+                </Grid>
+
+
+            </Grid>
+
+
+
+        </Grid>
+
+
+
+
+
+    </Grid>
+</Window>
